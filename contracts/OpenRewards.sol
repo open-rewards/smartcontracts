@@ -11,6 +11,7 @@ contract OpenRewards is Ownable {
     string public metadata;
     address public safeAddress = address(0);
     string public poolType;
+    uint public payoutDuration;
     address public splitsAddress = address(0);
     address[] public oldSplits;
     string[] public contributorUsernames;
@@ -28,7 +29,7 @@ contract OpenRewards is Ownable {
     }
 
     function setAddress(string memory username, uint nonce, bytes memory signature) public {
-        require(verify(trustedSigner, msg.sender, username, nonce, signature));
+        require(verify(trustedSigner, msg.sender, username, nonce, signature), "unable to verify signature");
         usernameMap[msg.sender] = username;
         reverseUsernameMap[username] = msg.sender;
     }
@@ -42,6 +43,13 @@ contract OpenRewards is Ownable {
             oldSplits.push(splitsAddress);
         }
         splitsAddress = _splitsAddress;
+    }
+
+    function setState(address _safeAddress, address _splitsAddress, string calldata _poolType, uint _payoutDuration) public onlyOwner {
+        safeAddress = _safeAddress;
+        splitsAddress = _splitsAddress;
+        poolType = _poolType;
+        payoutDuration = _payoutDuration;
     }
 
     function getMessageHash(
