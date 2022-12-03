@@ -23,7 +23,7 @@ contract OpenRewards is Ownable {
         metadata = _metadata;
     }
 
-    function setContributors(string[] calldata _contributorUsernames) public onlyOwner {
+    function setContributors(string[] memory _contributorUsernames) public onlyOwner {
         contributorUsernames = _contributorUsernames;
     }
 
